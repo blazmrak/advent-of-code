@@ -4,10 +4,9 @@ version = "1.0.0"
 edition = "2021"
 
 [[bin]]
-name="part-1"
-path="2022/problems/day-1/rust/part-1.rs"
-
-[lib]
-
+name="server"
+path="rust/src/main.rs"
 
 [dependencies]
+actix-web = "4"
+serde = { version = "1.0.148", features = ["derive"] }
