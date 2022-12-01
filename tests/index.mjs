@@ -16,18 +16,18 @@ async function evaluate({ year, dayIndex, partIndex, input, expected, showSoluti
 }
 
 async function readInputAndExpected({ year, dayIndex, partIndex, type }) {
-    const path = `${year}/problems/day-${dayIndex}/test/part-${partIndex}/${type}`
+    const path = `problems/${year}/day-${dayIndex}/part-${partIndex}/${type}`
     const input = fs.readFileSync(`${path}/input.txt`).toString()
     const expected = fs.readFileSync(`${path}/result.txt`).toString()
     return { input, expected }
 }
 
 const year = 2022
-const days = fs.readdirSync(`${year}/problems`, { withFileTypes: true })
+const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
 for (const day of days) {
     const dayIndex = day.name.split('-')[1]
 
-    const parts = fs.readdirSync(`${year}/problems/day-${dayIndex}/test`, { withFileTypes: true })
+    const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true }).filter(d => d.isDirectory())
     for (const part of parts) {
         const partIndex = part.name.split('-')[1]
 

@@ -1,7 +1,7 @@
-import { readInputString } from "../../../../node/files/read-file.mjs";
-import { sumArray } from "../../../../node/array/reduce.mjs";
-import { Mapper } from "../../../../node/array/map.mjs";
-import { iAmBeingExecuted } from "../../../../node/files/execution.mjs";
+import { Mapper } from "../../../array/map.mjs";
+import { sumArray } from "../../../array/reduce.mjs";
+import { iAmBeingExecuted } from "../../../files/execution.mjs";
+import { readInputString } from "../../../files/read-file.mjs";
 
 function parseElfBags(input) {
     return input.split('\n\n').map(elfBag => elfBag.split('\n').map(Mapper.toInt))

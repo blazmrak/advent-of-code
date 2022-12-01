@@ -5,7 +5,7 @@ edition = "2021"
 
 [[bin]]
 name="server"
-path="rust/src/main.rs"
+path="implementations/rust/src/main.rs"
 
 [dependencies]
 actix-web = "4"

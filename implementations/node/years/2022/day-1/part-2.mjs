@@ -1,8 +1,8 @@
 import { readElfBagTotals } from "./part-1.mjs";
-import { sortAscending } from "../../../../node/array/sort.mjs";
-import { sumArray } from "../../../../node/array/reduce.mjs";
-import { readInputString } from "../../../../node/files/read-file.mjs";
-import { iAmBeingExecuted } from "../../../../node/files/execution.mjs";
+import { sortAscending } from "../../../array/sort.mjs";
+import { sumArray } from "../../../array/reduce.mjs";
+import { iAmBeingExecuted } from "../../../files/execution.mjs";
+import { readInputString } from "../../../files/read-file.mjs";
 
 export function execute(input) {
     const summedBags = readElfBagTotals(input)
