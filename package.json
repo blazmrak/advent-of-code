@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node implementations/express/index.mjs",
+    "dev": "node implementations/node/years/2022/day-2/part-2.mjs",
     "test": "node tests/index.mjs"
   },
   "author": "",

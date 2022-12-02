@@ -5,7 +5,7 @@ async function request(year, day, part, input) {
     return (await axios.post(`/years/${year}/days/${day}/parts/${part}`, { input }, { baseURL: 'http://localhost:3000' })).data.result
 }
 
-async function evaluate({ year, dayIndex, partIndex, input, expected, showSolution = false }) {
+async function evaluate({ year, dayIndex, partIndex, input, expected, showSolution = true }) {
     const result = await request(year, dayIndex, partIndex, input)
 
     if (expected !== result.toString()) {
@@ -31,7 +31,7 @@ for (const day of days) {
     for (const part of parts) {
         const partIndex = part.name.split('-')[1]
 
-        const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type: 'real' })
+        const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type: 'toy' })
         await evaluate({ year, dayIndex, partIndex, input, expected })
     }
 }
