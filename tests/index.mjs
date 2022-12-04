@@ -39,7 +39,7 @@ for (const day of days) {
     for (const part of parts) {
         const partIndex = part.name.split('-')[1]
 
-        const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type: 'toy' })
+        const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type: 'real' })
         await evaluate({ year, dayIndex, partIndex, input, expected })
     }
 }
