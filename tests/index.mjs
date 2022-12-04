@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import fs from "fs";
 
 async function request(year, day, part, input) {
@@ -6,12 +6,20 @@ async function request(year, day, part, input) {
 }
 
 async function evaluate({ year, dayIndex, partIndex, input, expected, showSolution = true }) {
-    const result = await request(year, dayIndex, partIndex, input)
+    try {
+        const result = await request(year, dayIndex, partIndex, input)
 
-    if (expected !== result.toString()) {
-        console.error(`X ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
-    } else {
-        console.log(`_ ${year}/day-${dayIndex}[${partIndex}] passed.`)
+        if (expected !== result.toString()) {
+            console.error(`X ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
+        } else {
+            console.log(`_ ${year}/day-${dayIndex}[${partIndex}] passed.`)
+        }
+    } catch (e) {
+        if(e instanceof AxiosError) {
+            console.error(`X ${year}/day-${dayIndex}[${partIndex}] died on server.`)
+        } else {
+            console.error(`X ${year}/day-${dayIndex}[${partIndex}] died.`)
+        }
     }
 }
 
