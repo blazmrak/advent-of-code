@@ -6,7 +6,8 @@ fn split_into_compartments(line: &str) -> Vec<&str> {
 }
 
 fn parse_into_compartments(input: &String) -> Vec<Vec<&str>> {
-    return input.split('\n')
+    return input
+        .lines()
         .map(|line| split_into_compartments(line))
         .collect()
 }

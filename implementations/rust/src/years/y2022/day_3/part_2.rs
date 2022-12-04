@@ -1,18 +1,18 @@
 use crate::years::y2022::day_3::common::sum_common_items_in_compartments;
 
-fn split_into_threes(lines: &String) -> Vec<Vec<&str>> {
+fn split_into_threes(input: &String) -> Vec<Vec<&str>> {
     let mut collector: Vec<Vec<&str>> = vec![];
-    let mut temp: Vec<&str> = vec![];
-    for (index, line) in lines.split('\n').enumerate() {
+    let mut chunk: Vec<&str> = vec![];
+    for (index, line) in input.lines().enumerate() {
         if index > 0 && index % 3 == 0 {
-            collector.push(temp);
-            temp = vec![]
+            collector.push(chunk);
+            chunk = vec![]
         }
 
-        temp.push(line);
+        chunk.push(line);
     }
 
-    collector.push(temp);
+    collector.push(chunk);
 
     return collector;
 }
