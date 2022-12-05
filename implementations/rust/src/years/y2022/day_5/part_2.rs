@@ -1,10 +1,10 @@
 use crate::years::y2022::day_5::common::{parse_input, take_tops};
 
-fn execute_commands(columns: &mut Vec<Vec<char>>, instructions: Vec<[i8; 3]>) {
+fn execute_commands(columns: &mut Vec<Vec<char>>, instructions: Vec<[usize; 3]>) {
     instructions.into_iter().for_each(|[n, from, to]| {
-        let remaining_items = columns[from as usize].len() - n as usize;
-        let mut top = columns[from as usize].drain(remaining_items..).collect::<Vec<char>>();
-        columns[to as usize].append(&mut top);
+        let remaining_items = columns[from].len() - n;
+        let mut top = columns[from].drain(remaining_items..).collect::<Vec<char>>();
+        columns[to].append(&mut top);
     })
 }
 
