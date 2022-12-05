@@ -28,5 +28,5 @@ export function execute(input) {
 }
 
 if(iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 2, 2, 'toy')))
+    console.log(execute(readInputString(2022, 2, 2, 'real')))
 }
