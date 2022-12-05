@@ -19,3 +19,9 @@ pub mod day_4 {
     pub mod part_1;
     pub mod part_2;
 }
+
+pub mod day_5 {
+    mod common;
+    pub mod part_1;
+    pub mod part_2;
+}

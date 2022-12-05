@@ -26,6 +26,12 @@ pub fn solve_problem(year: i16, day: i8, part: i8, input: String) -> String {
             } else if part == 2 {
                 return y2022::day_4::part_2::execute(input).to_string();
             }
+        } else if day == 5 {
+            if part == 1 {
+                return y2022::day_5::part_1::execute(input);
+            } else if part == 2 {
+                return y2022::day_5::part_2::execute(input);
+            }
         }
     }
 
