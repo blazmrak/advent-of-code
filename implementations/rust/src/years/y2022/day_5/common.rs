@@ -8,8 +8,8 @@ fn parse_columns(rows: &str) -> Vec<Vec<char>> {
         (1..line.len()).step_by(4)
             .map(|index| line.chars().nth(index).unwrap())
             .enumerate()
-            .filter(|(_, char)| *char != ' ')
-            .for_each(|(i, char)| columns[i].insert(0, char));
+            .filter(|(_, item)| *item != ' ')
+            .for_each(|(column, item)| columns[column].insert(0, item));
     }
 
     return columns;
