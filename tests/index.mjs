@@ -30,16 +30,44 @@ async function readInputAndExpected({ year, dayIndex, partIndex, type }) {
     return { input, expected }
 }
 
-const year = 2022
-const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
-for (const day of days) {
-    const dayIndex = day.name.split('-')[1]
+async function readInputAndExpectedV2({ year, dayIndex, partIndex, type }) {
+    const inputPath = `problems/${year}/day-${dayIndex}/${type}/input.txt`
+    const input = fs.readFileSync(inputPath).toString()
 
-    const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true }).filter(d => d.isDirectory())
-    for (const part of parts) {
-        const partIndex = part.name.split('-')[1]
+    const resultPath = `problems/${year}/day-${dayIndex}/${type}/part-${partIndex}.txt`
+    const expected = fs.readFileSync(resultPath).toString()
 
-        const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type: 'real' })
-        await evaluate({ year, dayIndex, partIndex, input, expected })
+    return { input, expected }
+}
+
+async function runTests(year, type) {
+    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
+    for (const day of days) {
+        const dayIndex = day.name.split('-')[1]
+
+        const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true }).filter(d => d.isDirectory())
+        for (const part of parts) {
+            const partIndex = part.name.split('-')[1]
+
+            const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type })
+            await evaluate({ year, dayIndex, partIndex, input, expected })
+        }
     }
 }
+
+async function runTestsV2(year, type = 'real') {
+    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
+    for (const day of days) {
+        const dayIndex = day.name.split('-')[1]
+
+        const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true }).filter(d => d.isFile() && d.name.startsWith('part'))
+        for (const part of parts) {
+            const partIndex = part.name.split('-')[1][0]
+
+            const { input, expected } = await readInputAndExpectedV2({ year, dayIndex, partIndex, type })
+            await evaluate({ year, dayIndex, partIndex, input, expected })
+        }
+    }
+}
+
+runTestsV2(2022)
