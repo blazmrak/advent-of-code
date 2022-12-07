@@ -11,18 +11,16 @@ fn navigate(current: &String, new: &str) -> String {
 
 pub fn collect_dirs(input: String) -> HashMap<String, i32> {
     let mut dirs = HashMap::new();
-    let mut dir: String = String::from("");
+    let mut current_dir: String = String::from("");
     input.lines().for_each(|line| {
-        if line.starts_with("$") {
-            let split = line.split(' ').collect::<Vec<&str>>();
-            if split[1] == "cd" {
-                dir = navigate(&dir, split[2]);
-            }
-        } else if !line.starts_with("dir") {
-            let size_str = line.split_once(' ');
-            let size: i32 = size_str.unwrap().0.parse().unwrap();
+        if line.starts_with("$ cd") {
+            let destination = line.split(' ').nth(2).unwrap();
+            current_dir = navigate(&current_dir, destination);
+        } else if !line.starts_with("dir") && !line.starts_with("$") {
+            let size_str = line.split_once(' ').unwrap();
+            let size: i32 = size_str.0.parse().unwrap();
 
-            let path = dir.split('/');
+            let path = current_dir.split('/');
             let mut temp = String::from("");
             for partial in path {
                 temp = format!("{temp}{partial}/");
@@ -32,5 +30,5 @@ pub fn collect_dirs(input: String) -> HashMap<String, i32> {
         }
     });
 
-    return dirs
+    return dirs;
 }
