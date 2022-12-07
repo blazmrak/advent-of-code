@@ -1,48 +1,50 @@
-import { Reducer } from "../../../array/reduce.mjs";
+function navigate(dir, destination) {
+    if (destination === '..') {
+        return dir.substring(0, dir.lastIndexOf('/'))
+    } else if (destination === '/') {
+        return '/'
+    } else {
+        if (dir === '/')
+            return dir + destination
+        else
+            return dir + '/' + destination
+    }
+}
 
-export function dirSizes(input) {
-    const dirs = {
+class DirSizeTracker {
+    dir = ''
+    dirs = {
         '/': 0
     }
-    let dir = ''
+
+    navigate(value) {
+        this.dir = navigate(this.dir, value)
+    }
+
+    trackFile(size) {
+        const path = this.dir.split('/')
+        let temp = ''
+        for (const p of path) {
+            temp += p + '/'
+            this.dirs[temp] ??= 0
+            this.dirs[temp] += size
+        }
+    }
+}
+
+export function dirSizes(input) {
+    const tracker = new DirSizeTracker()
+
     for (const line of input.split('\n')) {
-        if (line.startsWith('$')) {
-            const [_, command, value] = line.split(' ')
-            if (command === 'cd') {
-                if (value === '..') {
-                    dir = dir.substring(0, dir.lastIndexOf('/'))
-                } else if (value === '/') {
-                    dir = '/'
-                } else {
-                    if (dir === '/')
-                        dir += value
-                    else
-                        dir += '/' + value
-                }
-            }
-        } else if (!line.startsWith('dir')) {
+        if (line.startsWith('$ cd')) {
+            tracker.navigate(line.split(' ')[2])
+        } else if (!line.startsWith('$') && !line.startsWith('dir')) {
             const [size_str] = line.split(' ')
             const size = parseInt(size_str, 10)
-            if (dir === '/') {
-                dirs['/'] += size
-            } else {
-                const path = dir.split('/')
-                path.shift()
-                let temp = ''
-                for (const p of path) {
-                    temp += p + '/'
-                    dirs[temp] ??= 0
-                    dirs[temp] += size
-                }
-            }
+
+            tracker.trackFile(size)
         }
     }
 
-    dirs['/'] = totalSize(dirs)
-
-    return dirs
-}
-
-function totalSize(dirs) {
-    return Object.entries(dirs).filter(([key]) => /^(\w+)\/$/.test(key)).map(([_, value]) => value).reduce(Reducer.sum) + dirs['/']
+    return tracker.dirs
 }
