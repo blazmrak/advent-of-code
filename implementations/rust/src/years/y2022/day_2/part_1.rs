@@ -46,10 +46,11 @@ fn score(me: i8, result: i8) -> i8 {
     return me + (result + 1) * 3
 }
 
-pub fn execute(input: String) -> i32 {
+pub fn execute(input: String) -> String {
     return parse_input(input)
         .iter()
         .map(|(opponent, me)| (*me, play(*opponent, *me)))
         .map(|(me, result)| score(me, result))
         .fold(0, |acc, el| acc + el as i32)
+        .to_string()
 }

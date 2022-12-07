@@ -12,6 +12,6 @@ fn parse_into_compartments(input: &String) -> Vec<Vec<&str>> {
         .collect()
 }
 
-pub fn execute(input: String) -> i32 {
-    sum_common_items_in_compartments(parse_into_compartments(&input))
+pub fn execute(input: String) -> String {
+    sum_common_items_in_compartments(parse_into_compartments(&input)).to_string()
 }

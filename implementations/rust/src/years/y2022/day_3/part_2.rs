@@ -17,6 +17,6 @@ fn split_into_threes(input: &String) -> Vec<Vec<&str>> {
     return collector;
 }
 
-pub fn execute(input: String) -> i32 {
-    sum_common_items_in_compartments(split_into_threes(&input))
+pub fn execute(input: String) -> String {
+    sum_common_items_in_compartments(split_into_threes(&input)).to_string()
 }
