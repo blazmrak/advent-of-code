@@ -5,20 +5,21 @@ async function request(year, day, part, input) {
     return (await axios.post(`/years/${year}/days/${day}/parts/${part}`, { input }, { baseURL: 'http://localhost:3000' })).data.result
 }
 
-async function evaluate({ year, dayIndex, partIndex, input, expected, showSolution = true }) {
+async function evaluate({ type, year, dayIndex, partIndex, input, expected, showSolution = true }) {
     try {
         const result = await request(year, dayIndex, partIndex, input)
 
         if (expected !== result.toString()) {
-            console.error(`X ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
+            console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
         } else {
-            console.log(`_ ${year}/day-${dayIndex}[${partIndex}] passed.`)
+            console.log(`_ <${type}> ${year}/day-${dayIndex}[${partIndex}] passed.`)
         }
     } catch (e) {
-        if(e instanceof AxiosError) {
-            console.error(`X ${year}/day-${dayIndex}[${partIndex}] died on server.`)
+        if (e instanceof AxiosError) {
+            if (e.response?.status === 501) console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] not implemented.`)
+            else console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] died on server.`)
         } else {
-            console.error(`X ${year}/day-${dayIndex}[${partIndex}] died.`)
+            console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] died.`)
         }
     }
 }
@@ -60,12 +61,17 @@ async function runTestsV2(year, type = 'real') {
     for (const day of days) {
         const dayIndex = day.name.split('-')[1]
 
-        const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true }).filter(d => d.isFile() && d.name.startsWith('part'))
-        for (const part of parts) {
-            const partIndex = part.name.split('-')[1][0]
+        const types = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true })
+            .filter(d => d.isDirectory() && d.name.startsWith(type))
+            .map(type => type.name)
+        for (const type of types) {
+            const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true }).filter(d => d.isFile() && d.name.startsWith('part'))
+            for (const part of parts) {
+                const partIndex = part.name.split('-')[1][0]
 
-            const { input, expected } = await readInputAndExpectedV2({ year, dayIndex, partIndex, type })
-            await evaluate({ year, dayIndex, partIndex, input, expected })
+                const { input, expected } = await readInputAndExpectedV2({ year, dayIndex, partIndex, type })
+                await evaluate({ type, year, dayIndex, partIndex, input, expected })
+            }
         }
     }
 }
