@@ -1,9 +1,8 @@
-use serde::de::Unexpected::Option;
 use SolveProblemError::NotFound;
 
 mod y2022;
 
-const SOLUTIONS_2022: &'static [fn(String) -> String; 12] = &[
+const SOLUTIONS_2022: &'static [fn(String) -> String; 14] = &[
     y2022::day_1::part_1::execute,
     y2022::day_1::part_2::execute,
     y2022::day_2::part_1::execute,
@@ -16,6 +15,8 @@ const SOLUTIONS_2022: &'static [fn(String) -> String; 12] = &[
     y2022::day_5::part_2::execute,
     y2022::day_6::part_1::execute,
     y2022::day_6::part_2::execute,
+    y2022::day_7::part_1::execute,
+    y2022::day_7::part_2::execute
 ];
 
 pub enum SolveProblemError {
