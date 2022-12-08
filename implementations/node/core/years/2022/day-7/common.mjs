@@ -1,14 +1,8 @@
 function navigate(dir, destination) {
-    if (destination === '..') {
+    if (destination === '..')
         return dir.substring(0, dir.lastIndexOf('/'))
-    } else if (destination === '/') {
-        return '/'
-    } else {
-        if (dir === '/')
-            return dir + destination
-        else
-            return dir + '/' + destination
-    }
+    else
+        return dir + '/' + destination
 }
 
 class DirSizeTracker {
