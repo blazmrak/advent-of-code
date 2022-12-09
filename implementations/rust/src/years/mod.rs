@@ -2,7 +2,7 @@ use SolveProblemError::NotFound;
 
 mod y2022;
 
-const SOLUTIONS_2022: &'static [fn(String) -> String; 16] = &[
+const SOLUTIONS_2022: &'static [fn(String) -> String; 18] = &[
     y2022::day_1::part_1::execute,
     y2022::day_1::part_2::execute,
     y2022::day_2::part_1::execute,
@@ -19,6 +19,8 @@ const SOLUTIONS_2022: &'static [fn(String) -> String; 16] = &[
     y2022::day_7::part_2::execute,
     y2022::day_8::part_1::execute,
     y2022::day_8::part_2::execute,
+    y2022::day_9::part_1::execute,
+    y2022::day_9::part_2::execute,
 ];
 
 pub enum SolveProblemError {
