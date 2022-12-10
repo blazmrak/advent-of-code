@@ -57,15 +57,17 @@ async function runTests(year, type) {
 }
 
 async function runTestsV2(year, type = 'real') {
-    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
-    for (const day of days) {
-        const dayIndex = day.name.split('-')[1]
-
+    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true })
+        .filter(d => d.isDirectory())
+        .map(dir => parseInt(dir.name.split('-')[1]))
+        .sort((p1, p2) => p1 - p2)
+    for (const dayIndex of days) {
         const types = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true })
             .filter(d => d.isDirectory() && d.name.startsWith(type))
             .map(type => type.name)
         for (const type of types) {
-            const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true }).filter(d => d.isFile() && d.name.startsWith('part'))
+            const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true })
+                .filter(d => d.isFile() && d.name.startsWith('part'))
             for (const part of parts) {
                 const partIndex = part.name.split('-')[1][0]
 
@@ -76,4 +78,4 @@ async function runTestsV2(year, type = 'real') {
     }
 }
 
-runTestsV2(2022, 'real')
+runTestsV2(2022, 'toy')
