@@ -50,4 +50,10 @@ pub mod day_9 {
     pub mod part_2;
 }
 
+pub mod day_10 {
+    mod common;
+    pub mod part_1;
+    pub mod part_2;
+}
+
 

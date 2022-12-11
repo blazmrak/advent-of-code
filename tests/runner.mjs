@@ -7,7 +7,7 @@ async function request(year, day, part, input) {
 }
 
 function evaluate({ type, year, dayIndex, partIndex, result, expected, showSolution = true }) {
-    if (expected !== result.toString()) {
+    if (expected !== result?.toString()) {
         console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
     } else {
         console.log(`_ <${type}> ${year}/day-${dayIndex}[${partIndex}] passed.`)
@@ -20,7 +20,6 @@ export async function testLocal({ type, year, dayIndex, partIndex, input, expect
 
         evaluate({ year, dayIndex, type, partIndex, expected, result, showSolution })
     } catch (e) {
-        console.log(e)
         console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] died.`)
     }
 }

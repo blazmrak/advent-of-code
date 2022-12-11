@@ -1,261 +1,198 @@
-# Day 9: Rope Bridge 
+# Day 10: Cathode-Ray Tube
 
-This rope bridge creaks as you walk along it. You aren't sure how old it is, or whether it can even support your weight.
+You avoid the ropes, plunge into the river, and swim to shore.
 
-It seems to support the Elves just fine, though. The bridge spans a gorge which was carved out by the massive river far below you.
+The Elves yell something about meeting back up with them upriver, but the river is too loud to tell exactly what they're saying. They finish crossing the bridge and disappear from view.
 
-You step carefully; as you do, the ropes stretch and twist. You decide to distract yourself by modeling rope physics; maybe you can even figure out where not to step.
+Situations like this must be why the Elves prioritized getting the communication system on your handheld device working. You pull it out of your pack, but the amount of water slowly draining from a big crack in its screen tells you it probably won't be of much immediate use.
 
-Consider a rope with a knot at each end; these knots mark the head and the tail of the rope. If the head moves far enough away from the tail, the tail is pulled toward the head.
+Unless, that is, you can design a replacement for the device's video system! It seems to be some kind of cathode-ray tube screen and simple CPU that are both driven by a precise clock circuit. The clock circuit ticks at a constant rate; each tick is called a cycle.
 
-Due to nebulous reasoning involving Planck lengths, you should be able to model the positions of the knots on a two-dimensional grid. Then, by following a hypothetical series of motions (your puzzle input) for the head, you can determine how the tail will move.
+Start by figuring out the signal being sent by the CPU. The CPU has a single register, X, which starts with the value 1. It supports only two instructions:
 
-Due to the aforementioned Planck lengths, the rope must be quite short; in fact, the head (H) and tail (T) must always be touching (diagonally adjacent and even overlapping both count as touching):
-```
-....
-.TH.
-....
+    addx V takes two cycles to complete. After two cycles, the X register is increased by the value V. (V can be negative.)
+    noop takes one cycle to complete. It has no other effect.
 
-....
-.H..
-..T.
-....
-fetch('https://gateway.reddit.com/desktopapi/v1/set_preferences?redditWebClient=web2x&app=web2x-client-production&allow_over18=1&include=identity', {method: 'POST', body: JSON.stringify({"type":"account","preferences":{"open_post_in_new_tab":false,"remember_community_sort":false,"sort":"hot","styles_enabled":true,"use_markdown":false,"layout":"card","remember_community_layout":false,"has_seen_customize_flyout":false,"reduce_animations_from_awards":false,"rpan_du_dismissal_time":null,"showRpanDu":true,"top_content_dismissal_time":null,"top_content_times_dismissed":0,"survey_last_seen_time":null,"activity_relevant_ads":false,"country_code":"SI","bad_comment_autocollapse":"OFF","third_party_data_personalized_ads":false,"third_party_site_data_personalized_ads":false,"third_party_personalized_ads":true,"third_party_site_data_personalized_content":false,"show_location_based_recommendations":false}})}
-...
-.H. (H covers T)
-...
-```
-If the head is ever two steps directly up, down, left, or right from the tail, the tail must also move one step in that direction so it remains close enough:
+The CPU uses these instructions in a program (your puzzle input) to, somehow, tell the screen what to draw.
+
+Consider the following small program:
 
 ```
-.....    .....    .....
-.TH.. -> .T.H. -> ..TH.
-.....    .....    .....
+noop
+addx 3
+addx -5
 ```
 
-```
-...    ...    ...
-.T.    .T.    ...
-.H. -> ... -> .T.
-...    .H.    .H.
-...    ...    ...
-```
+Execution of this program proceeds as follows:
 
-Otherwise, if the head and tail aren't touching and aren't in the same row or column, the tail always moves one step diagonally to keep up:
+    At the start of the first cycle, the noop instruction begins execution. During the first cycle, X is 1. After the first cycle, the noop instruction finishes execution, doing nothing.
+    At the start of the second cycle, the addx 3 instruction begins execution. During the second cycle, X is still 1.
+    During the third cycle, X is still 1. After the third cycle, the addx 3 instruction finishes execution, setting X to 4.
+    At the start of the fourth cycle, the addx -5 instruction begins execution. During the fourth cycle, X is still 4.
+    During the fifth cycle, X is still 4. After the fifth cycle, the addx -5 instruction finishes execution, setting X to -1.
 
-```
-.....    .....    .....
-.....    ..H..    ..H..
-..H.. -> ..... -> ..T..
-.T...    .T...    .....
-.....    .....    .....
-```
+Maybe you can learn something by looking at the value of the X register throughout execution. For now, consider the signal strength (the cycle number multiplied by the value of the X register) during the 20th cycle and every 40 cycles after that (that is, during the 20th, 60th, 100th, 140th, 180th, and 220th cycles).
+
+For example, consider this larger program:
 
 ```
-.....    .....    .....
-.....    .....    .....
-..H.. -> ...H. -> ..TH.
-.T...    .T...    .....
-.....    .....    .....
+addx 15
+addx -11
+addx 6
+addx -3
+addx 5
+addx -1
+addx -8
+addx 13
+addx 4
+noop
+addx -1
+addx 5
+addx -1
+addx 5
+addx -1
+addx 5
+addx -1
+addx 5
+addx -1
+addx -35
+addx 1
+addx 24
+addx -19
+addx 1
+addx 16
+addx -11
+noop
+noop
+addx 21
+addx -15
+noop
+noop
+addx -3
+addx 9
+addx 1
+addx -3
+addx 8
+addx 1
+addx 5
+noop
+noop
+noop
+noop
+noop
+addx -36
+noop
+addx 1
+addx 7
+noop
+noop
+noop
+addx 2
+addx 6
+noop
+noop
+noop
+noop
+noop
+addx 1
+noop
+noop
+addx 7
+addx 1
+noop
+addx -13
+addx 13
+addx 7
+noop
+addx 1
+addx -33
+noop
+noop
+noop
+addx 2
+noop
+noop
+noop
+addx 8
+noop
+addx -1
+addx 2
+addx 1
+noop
+addx 17
+addx -9
+addx 1
+addx 1
+addx -3
+addx 11
+noop
+noop
+addx 1
+noop
+addx 1
+noop
+noop
+addx -13
+addx -19
+addx 1
+addx 3
+addx 26
+addx -30
+addx 12
+addx -1
+addx 3
+addx 1
+noop
+noop
+noop
+addx -9
+addx 18
+addx 1
+addx 2
+noop
+noop
+addx 9
+noop
+noop
+noop
+addx -1
+addx 2
+addx -37
+addx 1
+addx 3
+noop
+addx 15
+addx -21
+addx 22
+addx -6
+addx 1
+noop
+addx 2
+addx 1
+noop
+addx -10
+noop
+noop
+addx 20
+addx 1
+addx 2
+addx 2
+addx -6
+addx -11
+noop
+noop
+noop
 ```
 
-You just need to work out where the tail goes as the head follows a series of motions. Assume the head and the tail both start at the same position, overlapping.
+The interesting signal strengths can be determined as follows:
 
-For example:
+    During the 20th cycle, register X has the value 21, so the signal strength is 20 * 21 = 420. (The 20th cycle occurs in the middle of the second addx -1, so the value of register X is the starting value, 1, plus all of the other addx values up to that point: 1 + 15 - 11 + 6 - 3 + 5 - 1 - 8 + 13 + 4 = 21.)
+    During the 60th cycle, register X has the value 19, so the signal strength is 60 * 19 = 1140.
+    During the 100th cycle, register X has the value 18, so the signal strength is 100 * 18 = 1800.
+    During the 140th cycle, register X has the value 21, so the signal strength is 140 * 21 = 2940.
+    During the 180th cycle, register X has the value 16, so the signal strength is 180 * 16 = 2880.
+    During the 220th cycle, register X has the value 18, so the signal strength is 220 * 18 = 3960.
 
-```
-R 4
-U 4
-L 3
-D 1
-R 4
-D 1
-L 5
-R 2
-```
+The sum of these signal strengths is 13140.
 
-This series of motions moves the head right four steps, then up four steps, then left three steps, then down one step, and so on. After each step, you'll need to update the position of the tail if the step means the head is no longer adjacent to the tail. Visually, these motions occur as follows (s marks the starting position as a reference point):
-
-```
-== Initial State ==
-
-......
-......
-......
-......
-H.....  (H covers T, s)
-
-== R 4 ==
-
-......
-......
-......
-......
-TH....  (T covers s)
-
-......
-......
-......
-......
-sTH...
-
-......
-......
-......
-......
-s.TH..
-
-......
-......
-......
-......
-s..TH.
-
-== U 4 ==
-
-......
-......
-......
-....H.
-s..T..
-
-......
-......
-....H.
-....T.
-s.....
-
-......
-....H.
-....T.
-......
-s.....
-
-....H.
-....T.
-......
-......
-s.....
-
-== L 3 ==
-
-...H..
-....T.
-......
-......
-s.....
-
-..HT..
-......
-......
-......
-s.....
-
-.HT...
-......
-......
-......
-s.....
-
-== D 1 ==
-
-..T...
-.H....
-......
-......
-s.....
-
-== R 4 ==
-
-..T...
-..H...
-......
-......
-s.....
-
-..T...
-...H..
-......
-......
-s.....
-
-......
-...TH.
-......
-......
-s.....
-
-......
-....TH
-......
-......
-s.....
-
-== D 1 ==
-
-......
-....T.
-.....H
-......
-s.....
-
-== L 5 ==
-
-......
-....T.
-....H.
-......
-s.....
-
-......
-....T.
-...H..
-......
-s.....
-
-......
-......
-..HT..
-......
-s.....
-
-......
-......
-.HT...
-......
-s.....
-
-......
-......
-HT....
-......
-s.....
-
-== R 2 ==
-
-......
-......
-.H....  (H covers T)
-......
-s.....
-
-......
-......
-.TH...
-......
-s.....
-```
-
-After simulating the rope, you can count up all of the positions the tail visited at least once. In this diagram, s again marks the starting position (which the tail also visited) and # marks other positions the tail visited:
-
-```
-..##..
-...##.
-.####.
-....#.
-s###..
-```
-
-So, there are 13 positions the tail visited at least once.
-
-Simulate your complete hypothetical series of motions. How many positions does the tail of the rope visit at least once?
+Find the signal strength during the 20th, 60th, 100th, 140th, 180th, and 220th cycles. What is the sum of these six signal strengths?

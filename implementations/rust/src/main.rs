@@ -5,12 +5,22 @@ mod files;
 
 use years::solve_problem as solve;
 use actix_web::{post, HttpResponse, Responder, HttpServer, App, web};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use crate::years::SolveProblemError;
 
 #[derive(Deserialize)]
 struct ProblemBody {
     input: String,
+}
+
+#[derive(Serialize)]
+struct ResultBody {
+    result: String,
+}
+
+#[derive(Serialize)]
+struct ErrorBody {
+    message: String,
 }
 
 #[derive(Deserialize)]
@@ -25,8 +35,7 @@ async fn solve_problem(path: web::Path<ProblemPath>, body: web::Json<ProblemBody
     match solve(path.year, path.day, path.part, body.input.clone()) {
         Ok(result) => {
             HttpResponse::Ok()
-                .append_header(("Content-type", "application/json"))
-                .body(format!("{{\"result\": \"{}\"}}", result))
+                .json(ResultBody { result })
         }
         Err(SolveProblemError::NotFound) => {
             HttpResponse::NotImplemented()
