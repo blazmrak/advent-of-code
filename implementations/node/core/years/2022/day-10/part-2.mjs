@@ -1,5 +1,3 @@
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 import { states } from "./common.mjs";
 
 export function execute(input) {
@@ -17,9 +15,3 @@ export function execute(input) {
 
     return screen.map(row => row.join('')).join('\n')
 }
-
-
-if (iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 10, 1, 'toy')))
-}
-

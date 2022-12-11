@@ -1,5 +1,3 @@
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 import { playRounds } from "./common.mjs";
 
 function parseInput(input) {
@@ -25,8 +23,4 @@ function toValue(opponent, result) {
 
 export function execute(input) {
     return playRounds(input, parseInput)
-}
-
-if(iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 2, 2, 'real')))
 }

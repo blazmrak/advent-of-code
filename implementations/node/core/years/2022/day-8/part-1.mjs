@@ -1,5 +1,3 @@
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 import { Mapper } from "../../../array/map.mjs";
 
 export function execute(input) {
@@ -48,8 +46,4 @@ export function execute(input) {
     }
 
     return set.size
-}
-
-if (iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 8, 1, 'real')))
 }

@@ -1,5 +1,3 @@
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 import { parseInput } from "./common.mjs";
 
 function isBetween(x, pair) {
@@ -14,8 +12,4 @@ export function execute(input) {
     return parseInput(input)
         .filter(([pair1, pair2]) => overlaps(pair1, pair2) || overlaps(pair2, pair1))
         .length
-}
-
-if (iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 4, 2, 'real')))
 }

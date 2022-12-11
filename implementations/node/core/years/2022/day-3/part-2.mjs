@@ -1,5 +1,3 @@
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 import { sumCommonItems } from './common.mjs'
 
 function groupIntoThrees(input) {
@@ -9,8 +7,4 @@ function groupIntoThrees(input) {
 
 export function execute(input) {
     return sumCommonItems(groupIntoThrees(input))
-}
-
-if (iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 3, 2, 'real')))
 }

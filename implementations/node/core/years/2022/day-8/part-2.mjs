@@ -1,6 +1,4 @@
 import { Mapper } from "../../../array/map.mjs";
-import { iAmBeingExecuted } from "../../../files/execution.mjs";
-import { readInputString } from "../../../files/read-file.mjs";
 
 export function execute(input) {
     const grid = input.split('\n').map(row => row.split('').map(Mapper.toInt))
@@ -36,8 +34,4 @@ export function execute(input) {
 
 
     return max
-}
-
-if (iAmBeingExecuted(import.meta.url)) {
-    console.log(execute(readInputString(2022, 8, 1, 'real')))
 }
