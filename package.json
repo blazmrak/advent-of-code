@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node implementations/express/index.mjs",
-    "dev": "node implementations/node/years/2022/day-2/part-2.mjs",
-    "test": "node tests/index.mjs"
+    "start": "node implementations/node/express/index.mjs",
+    "test": "node tests/index.mjs",
+    "t": "node tests/index.mjs",
+    "ta": "node tests/index.mjs -- -A",
+    "tl": "node tests/index.mjs -- -L",
+    "tla": "node tests/index.mjs -- -L -A"
   },
   "author": "",
   "license": "ISC",

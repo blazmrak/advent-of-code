@@ -8,5 +8,8 @@ export const Mapper = {
     peek(val) {
         console.log(val)
         return val
+    },
+    identity(e) {
+        return e
     }
 }

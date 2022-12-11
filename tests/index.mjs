@@ -1,81 +1,60 @@
-import axios, { AxiosError } from "axios";
-import fs from "fs";
+import { testLocal, runTests } from "./runner.mjs";
 
-async function request(year, day, part, input) {
-    return (await axios.post(`/years/${year}/days/${day}/parts/${part}`, { input }, { baseURL: 'http://localhost:3000' })).data.result
+function isNumber(value) {
+    if (typeof value === 'number') return true
+    else if (typeof value !== 'string') return false
+    else return !isNaN(parseInt(value, 10))
 }
 
-async function evaluate({ type, year, dayIndex, partIndex, input, expected, showSolution = true }) {
-    try {
-        const result = await request(year, dayIndex, partIndex, input)
-
-        if (expected !== result.toString()) {
-            console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] failed. ${showSolution ? `Expected ${expected} but got ${result}.` : ''}`)
+const { args, opts: { A: all, L: local } } = process.argv
+    .filter(arg => !arg.startsWith('C:') && !arg.startsWith('D:'))
+    .reduce((acc, arg) => {
+        if (arg.startsWith('-')) {
+            acc.opts[arg.substring(1)] = true
         } else {
-            console.log(`_ <${type}> ${year}/day-${dayIndex}[${partIndex}] passed.`)
+            acc.args.push(arg)
         }
-    } catch (e) {
-        if (e instanceof AxiosError) {
-            if (e.response?.status === 501) console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] not implemented.`)
-            else console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] died on server.`)
-        } else {
-            console.error(`X <${type}> ${year}/day-${dayIndex}[${partIndex}] died.`)
+
+        return acc
+    }, { args: [], opts: {} })
+
+const selectors = ['year', 'day', 'part', 'type']
+
+const config = args
+    .map((arg, i) => {
+        const isType = !isNumber(arg)
+        return {
+            index: i,
+            isType,
+            arg: !isType ? parseInt(arg, 10) : arg,
         }
-    }
-}
-
-async function readInputAndExpected({ year, dayIndex, partIndex, type }) {
-    const path = `problems/${year}/day-${dayIndex}/part-${partIndex}/${type}`
-    const input = fs.readFileSync(`${path}/input.txt`).toString()
-    const expected = fs.readFileSync(`${path}/result.txt`).toString()
-    return { input, expected }
-}
-
-async function readInputAndExpectedV2({ year, dayIndex, partIndex, type }) {
-    const inputPath = `problems/${year}/day-${dayIndex}/${type}/input.txt`
-    const input = fs.readFileSync(inputPath).toString()
-
-    const resultPath = `problems/${year}/day-${dayIndex}/${type}/part-${partIndex}.txt`
-    const expected = fs.readFileSync(resultPath).toString()
-
-    return { input, expected }
-}
-
-async function runTests(year, type) {
-    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true }).filter(d => d.isDirectory())
-    for (const day of days) {
-        const dayIndex = day.name.split('-')[1]
-
-        const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true }).filter(d => d.isDirectory())
-        for (const part of parts) {
-            const partIndex = part.name.split('-')[1]
-
-            const { input, expected } = await readInputAndExpected({ year, dayIndex, partIndex, type })
-            await evaluate({ year, dayIndex, partIndex, input, expected })
+    })
+    .map(({ arg, index, isType }) => {
+        return {
+            selector: isType ? 'type' : selectors[index],
+            arg
         }
-    }
+    })
+    .reduce((acc, { selector, arg }) => {
+        acc[selector] = arg
+        return acc
+    }, {
+        year: 2022,
+        type: 'real'
+    })
+
+if (config.part && !config.day) {
+    console.error('Day must be defined if part is defined')
+    process.exit(1);
 }
 
-async function runTestsV2(year, type = 'real') {
-    const days = fs.readdirSync(`problems/${year}`, { withFileTypes: true })
-        .filter(d => d.isDirectory())
-        .map(dir => parseInt(dir.name.split('-')[1]))
-        .sort((p1, p2) => p1 - p2)
-    for (const dayIndex of days) {
-        const types = fs.readdirSync(`problems/${year}/day-${dayIndex}`, { withFileTypes: true })
-            .filter(d => d.isDirectory() && d.name.startsWith(type))
-            .map(type => type.name)
-        for (const type of types) {
-            const parts = fs.readdirSync(`problems/${year}/day-${dayIndex}/${type}`, { withFileTypes: true })
-                .filter(d => d.isFile() && d.name.startsWith('part'))
-            for (const part of parts) {
-                const partIndex = part.name.split('-')[1][0]
-
-                const { input, expected } = await readInputAndExpectedV2({ year, dayIndex, partIndex, type })
-                await evaluate({ type, year, dayIndex, partIndex, input, expected })
-            }
-        }
-    }
+if (all) {
+    config.type = undefined
 }
 
-runTestsV2(2022, 'real')
+if (local) {
+    runTests(config, testLocal)
+} else {
+    runTests(config)
+}
+

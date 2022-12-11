@@ -86,5 +86,5 @@ export function playRounds(monkeys, nRounds) {
         }
     }
 
-    return counter.sort(Sorter.ascending).slice(0, 2).reduce(Reducer.multiply)
+    return counter.sort(Sorter.descending).slice(0, 2).reduce(Reducer.multiply)
 }
