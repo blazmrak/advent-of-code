@@ -78,4 +78,4 @@ async function runTestsV2(year, type = 'real') {
     }
 }
 
-runTestsV2(2022, 'toy')
+runTestsV2(2022, 'real')
