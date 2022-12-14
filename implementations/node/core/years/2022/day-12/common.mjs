@@ -1,3 +1,5 @@
+import { World } from "../../../world-map/world.mjs";
+
 function posToString(pos) {
     return `${pos[0]}-${pos[1]}`
 }
@@ -55,36 +57,32 @@ export class Queue {
 }
 
 export function parseInput(input) {
-    const lines = input.split('\n').map(line => line.split(''))
-    const [height, width] = [lines.length, lines[0].length]
-
-    const map = new Array(height).fill(0).map(() => new Array(width).fill(0))
-    let start;
-    let end;
-    for (let i = 0; i < height; i++) {
-        for (let j = 0; j < width; j++) {
-            switch (lines[i][j]) {
-                case 'S':
-                    start = [i, j]
-                    break
-                case 'E':
-                    end = [i, j]
-                    map[i][j] = 26
-                    break
-                default:
-                    map[i][j] = lines[i][j].charCodeAt(0) - 96
-                    break
-            }
+    const world = World.fromString(input, '\n', '')
+    const start = world.getCoordinateOf('S')
+    const end = world.getCoordinateOf('E')
+    world.mutate((value) => {
+        switch (value) {
+            case 'S':
+                return 0
+            case 'E':
+                return 26
+            default:
+                return value.charCodeAt(0) - 96
         }
-    }
+    })
 
     return {
         start,
         end,
-        map
+        world
     }
 }
 
-export function heightAtPosition(map, position) {
-    return map[position[0]][position[1]]
+export function neighbours(position) {
+    return [
+        [position[0], position[1] - 1],
+        [position[0], position[1] + 1],
+        [position[0] - 1, position[1]],
+        [position[0] + 1, position[1]],
+    ]
 }
