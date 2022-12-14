@@ -19,7 +19,7 @@ export class World {
         return [this.array[0].length, this.array.length]
     }
 
-    push(fill) {
+    pushRowOf(fill) {
         this.array.push(new Array(this.array[0].length).fill(fill))
         return this
     }
@@ -36,12 +36,13 @@ export class World {
         return null
     }
 
-    mutate(callback) {
+    map(callback) {
         for(let y = 0; y < this.array.length; y++) {
             for(let x = 0; x < this.array[y].length; x++) {
                 this.array[y][x] = callback(this.array[y][x])
             }
         }
+        return this
     }
 
     get([x, y]) {

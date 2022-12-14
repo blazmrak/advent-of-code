@@ -60,7 +60,7 @@ export function parseInput(input) {
     const world = World.fromString(input, '\n', '')
     const start = world.getCoordinateOf('S')
     const end = world.getCoordinateOf('E')
-    world.mutate((value) => {
+    world.map((value) => {
         switch (value) {
             case 'S':
                 return 0
