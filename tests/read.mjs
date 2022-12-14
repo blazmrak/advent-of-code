@@ -21,7 +21,7 @@ export function readDays(year, day) {
 }
 
 export function readTypes(year, dayIndex, type) {
-    return readOrDefault(type, `problems/${year}/day-${dayIndex}`)
+    return readOrDefault(null, `problems/${year}/day-${dayIndex}`)
         .filter(name => type == null ? true : name.startsWith(type))
 }
 
