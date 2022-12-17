@@ -2,8 +2,6 @@ import { createMap, dropSand, extractDimensions, parseInput } from "./common.mjs
 
 const padding = 167
 
-
-
 export function execute(input) {
     const paths = parseInput(input)
     const dimensions = extractDimensions(paths)

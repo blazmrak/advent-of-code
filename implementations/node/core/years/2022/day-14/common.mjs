@@ -2,10 +2,6 @@ import { Mapper } from "../../../array/map.mjs";
 import { World } from "../../../world-map/world.mjs";
 import { zip } from "../../../array/for.mjs";
 
-export function getTile(map, pos) {
-    return map[pos[0]][pos[1]]
-}
-
 export function parseInput(input) {
     return World.fromString(input, '\n', ' -> ')
         .map((value) => value.split(',').map(Mapper.toInt))

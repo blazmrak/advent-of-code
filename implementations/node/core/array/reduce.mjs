@@ -10,3 +10,13 @@ export const Reducer = {
 export function sumArray(bag) {
     return bag.reduce(Reducer.sum)
 }
+
+export function group(arr, n) {
+    const res = []
+
+    while (arr.length > 0) {
+        res.push(arr.splice(0, n))
+    }
+
+    return res
+}
